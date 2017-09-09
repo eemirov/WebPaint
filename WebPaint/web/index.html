@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html ng-app="app">
+<head>
+	<meta charset="utf-8" />
+	<title>Web Paint</title>
+	<link rel="stylesheet" href="/Content/bootstrap.min.css" />
+	<link rel="stylesheet" href="/Content/Site.css"/>
+</head>
+<body>
+<div>
+	<div class="container">
+		<div class="col-sm-10 col-sm-offset-1">
+			<div ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message"></div>
+			<div ng-view></div>
+		</div>
+	</div>
+</div>
+
+<script src="/Scripts/jquery-3.1.1.min.js"></script>
+<script src="/Scripts/angular.min.js"></script>
+<script src="/Scripts/angular-route.min.js"></script>
+<script src="/Scripts/d3/d3.min.js"></script>
+<script src="/Scripts/jquery.signalR-2.2.2.min.js"></script>
+<script src="/signalr/hubs"></script>
+	
+<script src="app.js"></script>
+<script src="services/location.service.js"></script>
+<script src="services/authentication.service.js"></script>
+<script src="services/flash.service.js"></script>
+<script src="services/share.service.js"></script>
+<script src="paintModel.js"></script>
+<script src="compareTo.js"></script>
+
+<script src="home/home.controller.js"></script>
+<script src="login/login.controller.js"></script>
+<script src="register/register.controller.js"></script>
+</body>
+</html>

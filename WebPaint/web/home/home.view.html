@@ -1,0 +1,44 @@
+﻿
+<div class="col-md-12">
+	
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<div class="row">
+				<div class="col-md-4">
+					<ul class="nav nav-tabs">
+						<li ng-class="{active: vm.figureType == 'rect'}">
+							<a href="#" ng-click="vm.figureClick($event,'rect')">Rect</a>
+						</li>
+						<li ng-class="{active: vm.figureType == 'ellipse'}">
+							<a href="#" ng-click="vm.figureClick($event,'ellipse')">Ellipse</a>
+						</li>
+						<li ng-class="{active: vm.figureType == 'line'}">
+							<a href="#" ng-click="vm.figureClick($event,'line')">Line</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-md-4">
+					<div class="panelButtons">
+						<button title="Undo" ng-disabled="vm.historyStack.length == 0" ng-click="vm.undoClick()">
+							<span class="glyphicon glyphicon-arrow-left"></span>
+						</button>
+					</div>
+				</div>
+				<div class="col-md-4 text-right">
+					<div class="panelButtons">
+						<button type="button" class="btn-primary" ng-click="vm.shareClick()">SHARE</button>
+						<button type="button" ng-click="vm.logout()" class="btn-primary">LOG OUT</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="panel-body">
+			<div class="canvas">
+				<svg id="paintCanvas" width="100%" height="100%" paint-model="{{vm.figureType}}" paint-data="{{vm.paintData}}"
+				     default-color="{{vm.defaultColor}}" paint-changed="vm.paintChanged(data)" 
+					 paint-canvas-data="{{vm.paintCanvasData}}" paint-history="vm.historyStack" paint-remove-id="{{vm.removedItemId}}">
+				</svg>
+			</div>
+		</div>
+	</div>
+</div>
