@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -59,8 +60,8 @@ namespace WebPaint
 
 	        var options = new FacebookAuthenticationOptions
 	        {
-		        AppId = "203005240237223",
-		        AppSecret = "b8268609f891fee335eb7142f425b29a",
+		        AppId = ConfigurationManager.AppSettings["FacebookAppId"],
+		        AppSecret = ConfigurationManager.AppSettings["FacebookAppSecret"]
 	        };
 
 	        options.Scope.Add("public_profile");
