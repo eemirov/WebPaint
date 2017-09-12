@@ -13,7 +13,7 @@
 		return service;
 
 		function ShareToFacebook(svgHtml, errorCallback) {
-			$http.post("/api/Share/StoreHtml", { html: svgHtml })
+			$http.post("/api/Share/StoreSVG", { html: svgHtml })
 				.then(function success(response) {
 					openSharePopup(response.data.Url);
 				},
