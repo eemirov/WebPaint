@@ -16,8 +16,6 @@ textarea {
     max-width: 280px;
 }
 
-rect, ellipse {fill-opacity: 0; }
-
 .canvas { height: 400px;}
 .panel-heading{ padding: 0;}
 .panel-body { padding: 0px;}

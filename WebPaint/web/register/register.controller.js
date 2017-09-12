@@ -14,7 +14,7 @@
 		function register() {
 			vm.dataLoading = true;
 			AuthenticationService.Register(vm.username, vm.password, vm.confirmpassword,
-				function (response) {
+				function success (response) {
 						FlashService.Success('Registration successful', true);
 						AuthenticationService.Login(vm.username, vm.password,
 							function (response) {
@@ -22,7 +22,7 @@
 								LocationService.RedirectToHomeLocation();
 							});
 				},
-				function (response) {
+				function error(response) {
 					FlashService.Error(response.ModelState[""][0]);
 					vm.dataLoading = false;
 				});

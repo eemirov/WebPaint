@@ -23,10 +23,10 @@
 		function login() {
 			vm.dataLoading = true;
 			AuthenticationService.Login(vm.username, vm.password,
-				function (response) {
+				function success(response) {
 					AuthenticationService.SetCredentials(response.userName, response.access_token);
 					LocationService.RedirectToHomeLocation();
-				}, function(response) {
+				}, function error(response) {
 				FlashService.Error(response.error_description);
 				vm.dataLoading = false;
 			});

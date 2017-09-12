@@ -5,8 +5,9 @@
 		.module('app')
 		.controller('HomeController', HomeController);
 
-	HomeController.$inject = ['$rootScope', '$scope', 'LocationService', 'AuthenticationService', 'ShareService', 'FlashService'];
-	function HomeController($rootScope, $scope, LocationService, AuthenticationService, ShareService, FlashService) {
+	HomeController.$inject = ['$rootScope', '$scope', 'LocationService', 'AuthenticationService',
+		'ShareService', 'FlashService', 'PaintHistoryService'];
+	function HomeController($rootScope, $scope, LocationService, AuthenticationService, ShareService, FlashService, PaintHistoryService) {
 		var vm = this;
 
 		vm.logout = logout;
@@ -15,25 +16,34 @@
 		vm.paintChanged = paintChanged;
 		vm.undoClick = undoClick;
 		vm.shareClick = shareClick;
+		vm.hasHistory = false;
 
 		vm.figureType = "line";
 		vm.defaultColor = $rootScope.globals.currentUser.defaultColor;
-		vm.paintData = undefined;
+		vm.paintAddData = undefined;
 		vm.paintCanvasData = undefined;
 		vm.removedItemId = "";
 
-		vm.historyStack = [];
+		var hub;
+		initHub();
 
-		var hub = $.connection.paintHub;
-		hub.client.addFigure = canvasChanged;
-		hub.client.getCanvas = getCanvas;
-		hub.client.updateCanvas = updateCanvas;
-		hub.client.undoItem = undoItem;
+		function initHub() {
+			hub = $.connection.paintHub;
 
-		$.connection.hub.start().done(function () { console.log("connected"); });
+			hub.client.addItem = addItem;
+			hub.client.removeItem = removeItem;
+			hub.client.getCanvas = getCanvas;
+			hub.client.updateCanvas = updateCanvas;
 
-		function canvasChanged(data) {
-			$scope.$apply(function () { vm.paintData = data; });
+			$.connection.hub.start();
+		}
+
+		function addItem(data) {
+			$scope.$apply(function () { vm.paintAddData = data; });
+		}
+
+		function removeItem(id) {
+			$scope.$apply(function () { vm.removedItemId = id; });
 		}
 
 		function getCanvas(userConnectionId) {
@@ -44,9 +54,6 @@
 			$scope.$apply(function () { vm.paintCanvasData = data; });
 		}
 
-		function undoItem(id) {
-			$scope.$apply(function () { vm.removedItemId = id; });
-		}
 
 		function logout() {
 			AuthenticationService.Logout(function success() {
@@ -70,12 +77,19 @@
 		}
 
 		function paintChanged(data) {
-			hub.server.addChange(JSON.stringify(data));
+			PaintHistoryService.Add(data);
+			vm.hasHistory = PaintHistoryService.Count > 0;
+			$scope.$apply();
+
+			hub.server.itemChanged(JSON.stringify(data));
 		}
 
 		function undoClick() {
-			var itemId = vm.historyStack.pop();
-			hub.server.undoItem(itemId);
+			var item = PaintHistoryService.Get();
+			vm.hasHistory = PaintHistoryService.Count > 0;
+
+			if(item != undefined)
+				hub.server.itemRemoved(item.id);
 		}
 
 		function shareClick() {

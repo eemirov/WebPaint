@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using Microsoft.AspNet.SignalR;
-using WebPaint.Models;
 
 namespace WebPaint
 {
@@ -13,9 +10,9 @@ namespace WebPaint
 	{
 		private static readonly Dictionary<string, bool> _connections = new Dictionary<string, bool>();
 
-		public void AddChange(string data)
+		public void ItemChanged(string data)
 		{
-			Clients.AllExcept(Context.ConnectionId).addFigure(data);
+			Clients.AllExcept(Context.ConnectionId).addItem(data);
 		}
 
 		public void SendCanvasData(string userConnectionId, string data)
@@ -23,9 +20,9 @@ namespace WebPaint
 			Clients.Client(userConnectionId).updateCanvas(data);
 		}
 
-		public void UndoItem(string id)
+		public void ItemRemoved(string id)
 		{
-			Clients.All.undoItem(id);
+			Clients.All.removeItem(id);
 		}
 
 		public override Task OnConnected()
